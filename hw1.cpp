@@ -1,10 +1,71 @@
 #include<bits/stdc++.h>
 using namespace std;
 const int INF = 1e9+7;
-int *a;
-double S;
-double Merge_sort(int l, int r){
-	S = clock();
+int *a, n, *heap, top=0;
+int s[]{10,10000,50000,100000,200000,300000,400000,500000,600000,700000,800000,900000,1000000};
+timespec S, E;
+string test(int* t){
+	sort(t, t+n);
+	for (int i=0;i<n;i++){
+		if (t[i]!=a[i]) return " BAD!";
+	}
+	return " NICE!";
+}
+int power(int a, int x){
+	int ans=1;
+	for(;x;x>>=1,a=a*a){
+		if(x&1)
+			ans=ans*a;
+	}
+	return ans;
+}
+void print(){
+	for (int i=0;i<n;i++){
+		cout << a[i] <<" ";
+	}
+	cout << "\n";
+}
+long double diff(timespec S, timespec E){
+	timespec temp;
+	if ((E.tv_nsec-S.tv_nsec)<0) {
+		temp.tv_sec = E.tv_sec-S.tv_sec-1;
+		temp.tv_nsec = 1000000000+E.tv_nsec-S.tv_nsec;
+	} else {
+		temp.tv_sec = E.tv_sec-S.tv_sec;
+		temp.tv_nsec = E.tv_nsec-S.tv_nsec;
+	}
+  	return temp.tv_sec + (long double) temp.tv_nsec / 1000000000.0;
+}
+void push(int d){
+	heap[++top] = d;
+	for (int i=top;i>1&&heap[i]<heap[i/2];i/=2){
+		swap(heap[i],heap[i/2]);
+	}
+}
+void pop(){
+	heap[1] = heap[top--];
+	for(int i=1;i*2<=top;)
+		if (i*2<top && heap[i*2+1]<heap[i] && heap[i*2+1]<heap[i*2])
+			swap(heap[i],heap[i*2+1]),i=i*2+1;
+		else if(heap[i*2]<heap[i])
+			swap(heap[i],heap[i*2]),i=i*2;
+		else
+			break;
+}
+long double Heap_sort(){
+	clock_gettime(CLOCK_MONOTONIC, &S);
+	for(int i=0;i<n;i++){
+		push(a[i]);
+	}
+	for (int i=0;i<n;i++){
+		a[i] = heap[1];
+		pop();
+	}
+	clock_gettime(CLOCK_MONOTONIC, &E);
+	return diff(S, E);
+}
+long double Merge_sort(int l, int r){
+	clock_gettime(CLOCK_MONOTONIC, &S);
 	if(l==r) return 0;
 	int m = (l+r)>>1;
 	Merge_sort(l, m);
@@ -25,17 +86,69 @@ double Merge_sort(int l, int r){
 		a[i] = q.front();
 		q.pop();
 	}
-	return (clock()-S)/CLOCKS_PER_SEC;
+	clock_gettime(CLOCK_MONOTONIC, &E);
+	return diff(S, E);
+}
+long double Quick_sort(int l, int r){
+	clock_gettime(CLOCK_MONOTONIC, &S);
+	if (r-l<1) return 0;
+	int i, j;
+	for (i=l-1, j=l;j<r;j++)
+		if(a[j]<a[r])
+			swap(a[++i], a[j]);
+	swap(a[++i], a[r]);
+	Quick_sort(l, i-1);
+	Quick_sort(i+1, r);
+	clock_gettime(CLOCK_MONOTONIC, &E);
+	return diff(S, E);
+}
+long double Shell_sort(){
+	clock_gettime(CLOCK_MONOTONIC, &S);
+	vector<int> v;
+	for (int i=1, gap=1;gap<=n;i++){
+		v.push_back(gap);
+		if(i%2)
+			gap = 8*power(2,i)-6*power(2, (i+1)/2)+1;
+		else
+			gap = 9*(power(2,i)-power(2,i/2))+1;
+	}
+	reverse(v.begin(), v.end());
+	for (int gap:v){
+		for (int i = gap;i<n;i++)
+			for (int j = i-gap;j>=0;j-=gap)
+				if (a[j]>a[j+gap])
+					swap(a[j], a[j+gap]);
+	}
+	clock_gettime(CLOCK_MONOTONIC, &E);
+	return diff(S, E);
 }
 int main(){
-	srand(time(NULL));
-	a = new int [10000];
-	for (int i=0;i<10000;i++){
-		a[i] = rand();
+	for (int i=0;i<12;i++){
+		int *temp;
+		srand(time(NULL));
+		n = s[i];
+		a = new int [n];
+		heap = new int [n];
+		temp = new int [n];
+		for (int j=0;j<n;j++)
+			temp[j] = rand();
+		cout << n << ":\n";
+		copy(temp, temp+n, a);
+		print();
+		cout << fixed << setprecision(10) << Heap_sort() << test(temp) << "\n";
+		print();
+		copy(temp, temp+n, a);
+		print();
+		cout << fixed << setprecision(10) << Merge_sort(0, n-1) << test(temp)  << "\n";
+		print();
+		copy(temp, temp+n, a);
+		print();
+		cout << fixed << setprecision(10) << Quick_sort(0, n-1) << test(temp)  << "\n";
+		print();
+		copy(temp, temp+n, a);
+		print();
+		cout << fixed << setprecision(10) << Shell_sort() << test(temp)  << "\n";
+		print();
+		delete [] a, heap;
 	}
-	cout << Merge_sort(0, 9999);
-	for (int i=0;i<10000;i++){
-		cout << a[i] <<" ";
-	}
-	delete [] a;
 }
