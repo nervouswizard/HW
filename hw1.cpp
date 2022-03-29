@@ -4,10 +4,12 @@ const int INF = 1e9+7;
 int *a, n, *heap, top=0;
 int s[]{10,10000,50000,100000,200000,300000,400000,500000,600000,700000,800000,900000,1000000};
 timespec S, E;
-string test(int* t){
-	sort(t, t+n);
+string test(int *t){
+	int *tt;
+	copy(t, t+n, tt);
+	sort(tt, tt+n);
 	for (int i=0;i<n;i++){
-		if (t[i]!=a[i]) return " BAD!";
+		if (tt[i]!=a[i]) return " BAD!";
 	}
 	return " NICE!";
 }
@@ -90,15 +92,22 @@ long double Merge_sort(int l, int r){
 	return diff(S, E);
 }
 long double Quick_sort(int l, int r){
+	cout << l <<" "<< r<<"\n";
 	clock_gettime(CLOCK_MONOTONIC, &S);
-	if (r-l<1) return 0;
-	int i, j;
-	for (i=l-1, j=l;j<r;j++)
-		if(a[j]<a[r])
-			swap(a[++i], a[j]);
-	swap(a[++i], a[r]);
-	Quick_sort(l, i-1);
-	Quick_sort(i+1, r);
+	if (r-l<=1) return 0;
+	int ii, j;
+	for (ii=l-1, j=l;j<r;j++){
+		if(a[j]<a[r]){
+			cout << a[ii+1] << " ";
+			swap(a[++ii], a[j]);
+			cout << ii << "\n";
+		}
+	}
+	swap(a[++ii], a[r]);
+	print();
+	cout << l << " " << ii << " " << r << "\n";
+	Quick_sort(l, ii-1);
+	Quick_sort(ii+1, r);
 	clock_gettime(CLOCK_MONOTONIC, &E);
 	return diff(S, E);
 }
@@ -135,20 +144,13 @@ int main(){
 		cout << n << ":\n";
 		copy(temp, temp+n, a);
 		print();
-		cout << fixed << setprecision(10) << Heap_sort() << test(temp) << "\n";
-		print();
-		copy(temp, temp+n, a);
-		print();
-		cout << fixed << setprecision(10) << Merge_sort(0, n-1) << test(temp)  << "\n";
-		print();
-		copy(temp, temp+n, a);
-		print();
 		cout << fixed << setprecision(10) << Quick_sort(0, n-1) << test(temp)  << "\n";
-		print();
 		copy(temp, temp+n, a);
-		print();
+		cout << fixed << setprecision(10) << Heap_sort() << test(temp) << "\n";
+		copy(temp, temp+n, a);
+		cout << fixed << setprecision(10) << Merge_sort(0, n-1) << test(temp)  << "\n";
+		copy(temp, temp+n, a);
 		cout << fixed << setprecision(10) << Shell_sort() << test(temp)  << "\n";
-		print();
-		delete [] a, heap;
+		delete [] a, heap, temp;
 	}
 }
