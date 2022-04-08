@@ -1,7 +1,8 @@
 #include<bits/stdc++.h>
 #include <time.h>
+#include<memory.h>
 using namespace std;
-const int INF = 1e9+7;
+const int INF = 2147483647;
 int a[1000000], n, heap[1000001], top, temp[1000000], t[1000000];
 int s[]{10,10000,50000,100000,200000,300000,400000,500000,600000,700000,800000,900000,1000000};
 timespec S, E;
@@ -71,23 +72,24 @@ void Merge_sort(int l, int r){
 	if(l==r) return;
 	int m = (l+r)>>1;
 	Merge_sort(l, m);
-	Merge_sort(++m, r);
-	int pl = l, pm = m, pr = r;
-	queue<int> q;
-	while(pl<m&&pm<=pr){
-		if (a[pl]<a[pm])
-			q.push(a[pl++]);
-		else
-			q.push(a[pm++]);
+	Merge_sort(m+1, r);
+	int* leftArr(new int [m - l + 2]);//6
+	int* rightArr(new int [r - m + 1]);//6
+	memcpy(leftArr, a + l, (m - l + 1)* sizeof(int));
+	memcpy(rightArr, a + (m+1), (r - m)* sizeof(int));
+	leftArr[m - l + 1 ] = INF;
+	rightArr[r - m ] = INF;
+	int idxLeft(0), idxRight(0); 
+	for(int i(l); i <= r; ++i) {
+		if(leftArr[idxLeft] < rightArr[idxRight]){
+			a[i] = leftArr[idxLeft++];
+		}
+		else{
+			a[i] = rightArr[idxRight++];
+		}
 	}
-	while(pl<m)
-		q.push(a[pl++]);
-	while(pm<=pr)
-		q.push(a[pm++]);
-	for (int i=l;i<=r;i++){
-		a[i] = q.front();
-		q.pop();
-	}
+	delete[] leftArr;
+	delete[] rightArr;
 }
 void Quick_sort(int l, int r){
 	if (r-l<1) return;
