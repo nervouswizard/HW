@@ -1,0 +1,93 @@
+[
+	{
+		"scale": 10,
+		"Heap_sort": 0.0000010000,
+		"Merge_sort": 0.0000081000,
+		"Quick_sort": 0.0000008000,
+		"Shell_sort": 0.0000029000
+	},
+	{
+		"scale": 10000,
+		"Heap_sort": 0.0024905000,
+		"Merge_sort": 0.0034433000,
+		"Quick_sort": 0.0015439000,
+		"Shell_sort": 0.0020103000
+	},
+	{
+		"scale": 50000,
+		"Heap_sort": 0.0150551000,
+		"Merge_sort": 0.0195230000,
+		"Quick_sort": 0.0101538000,
+		"Shell_sort": 0.0114719000
+	},
+	{
+		"scale": 100000,
+		"Heap_sort": 0.0333971000,
+		"Merge_sort": 0.0341250000,
+		"Quick_sort": 0.0228178000,
+		"Shell_sort": 0.0244540000
+	},
+	{
+		"scale": 200000,
+		"Heap_sort": 0.0837928000,
+		"Merge_sort": 0.0735049000,
+		"Quick_sort": 0.0477325000,
+		"Shell_sort": 0.0541190000
+	},
+	{
+		"scale": 300000,
+		"Heap_sort": 0.1224620000,
+		"Merge_sort": 0.1058612000,
+		"Quick_sort": 0.0740293000,
+		"Shell_sort": 0.0823592000
+	},
+	{
+		"scale": 400000,
+		"Heap_sort": 0.1539460000,
+		"Merge_sort": 0.1425035000,
+		"Quick_sort": 0.0952613000,
+		"Shell_sort": 0.1149120000
+	},
+	{
+		"scale": 500000,
+		"Heap_sort": 0.2009558000,
+		"Merge_sort": 0.1781150000,
+		"Quick_sort": 0.1273452000,
+		"Shell_sort": 0.1437724000
+	},
+	{
+		"scale": 600000,
+		"Heap_sort": 0.2536532000,
+		"Merge_sort": 0.2089356000,
+		"Quick_sort": 0.1454934000,
+		"Shell_sort": 0.1705424000
+	},
+	{
+		"scale": 700000,
+		"Heap_sort": 0.3079532000,
+		"Merge_sort": 0.2525186000,
+		"Quick_sort": 0.1868867000,
+		"Shell_sort": 0.2327639000
+	},
+	{
+		"scale": 800000,
+		"Heap_sort": 0.3572545000,
+		"Merge_sort": 0.2997091000,
+		"Quick_sort": 0.2147796000,
+		"Shell_sort": 0.2361127000
+	},
+	{
+		"scale": 900000,
+		"Heap_sort": 0.4039291000,
+		"Merge_sort": 0.3167565000,
+		"Quick_sort": 0.2399463000,
+		"Shell_sort": 0.3226803000
+	},
+	{
+		"scale": 1000000,
+		"Heap_sort": 0.5022979000,
+		"Merge_sort": 0.3617382000,
+		"Quick_sort": 0.2619903000,
+		"Shell_sort": 0.3179345000
+	}
+]

@@ -2,6 +2,7 @@
 #include <time.h>
 #include<memory.h>
 using namespace std;
+
 const int INF = 2147483647;
 int a[1000000], n, heap[1000001], top, temp[1000000], t[1000000];
 int s[]{10,10000,50000,100000,200000,300000,400000,500000,600000,700000,800000,900000,1000000};
@@ -15,13 +16,13 @@ void print(){
 	}
 	cout << "\n";
 }
-string test(){
+bool test(){
 //	print();
 //	for (int i=0;i<n;i++) cout << t[i] << " ";
 //	cout << "\n";
 	for (int i=0;i<n;i++)
-		if (t[i]!=a[i]) return " BAD!";
-	return " NICE!";
+		if (t[i]!=a[i]) return 0;
+	return 1;
 }
 int power(int a, int x){
 	int ans=1;
@@ -122,13 +123,18 @@ void Shell_sort(){
 	}
 }
 int main(){
+	fstream file;
+	file.open("result.json", ios::out);
+	file << "[\n";
 	srand(time(NULL));
 	long double rt;
 	for (int i=0;i<13;i++){
+		file << "	{\n";
 		n = s[i];
 		for (int j=0;j<n;j++)
 			temp[j] = ( rand() << 15 ) | rand();
-		cout << n << ":\n";
+//		cout << n << ":\n";
+		file <<"		\"scale\": "<< n << ",\n";
 		copy(temp, temp+n, t);
 		sort(t, t+n, cmp);
 		
@@ -137,31 +143,50 @@ int main(){
 		Heap_sort();
 		clock_gettime(CLOCK_MONOTONIC, &E);
 		rt = diff(S, E);
-		test();
-		cout << fixed << setprecision(10) << rt << test() << "\n";
+//		cout << fixed << setprecision(10) << rt << test() << "\n";
+		file <<"		\"Heap_sort\": ";
+		if (test())
+			file <<  fixed << setprecision(10) << rt << ",\n";
+		else 
+			file << "0\n";
 		
 		copy(temp, temp+n, a);
 		clock_gettime(CLOCK_MONOTONIC, &S);
 		Merge_sort(0, n-1);
 		clock_gettime(CLOCK_MONOTONIC, &E);
 		rt = diff(S, E);
-		test();
-		cout << fixed << setprecision(10) << rt << test() << "\n";
+//		cout << fixed << setprecision(10) << rt << test() << "\n";
+		file <<"		\"Merge_sort\": ";
+		if (test())
+			file <<  fixed << setprecision(10) << rt << ",\n";
+		else 
+			file << "0\n";
 		
 		copy(temp, temp+n, a);
 		clock_gettime(CLOCK_MONOTONIC, &S);
 		Quick_sort(0, n-1);
 		clock_gettime(CLOCK_MONOTONIC, &E);
 		rt = diff(S, E);
-		test();
-		cout << fixed << setprecision(10) << rt << test() << "\n";
+//		cout << fixed << setprecision(10) << rt << test() << "\n";
+		file <<"		\"Quick_sort\": ";
+		if (test())
+			file <<  fixed << setprecision(10) << rt << ",\n";
+		else 
+			file << "0\n";
 		
 		copy(temp, temp+n, a);
 		clock_gettime(CLOCK_MONOTONIC, &S);
 		Shell_sort();
 		clock_gettime(CLOCK_MONOTONIC, &E);
 		rt = diff(S, E);
-		test();
-		cout << fixed << setprecision(10) << rt << test() << "\n";
+//		cout << fixed << setprecision(10) << rt << test() << "\n";
+		file <<"		\"Shell_sort\": ";
+		if (test())
+			file <<  fixed << setprecision(10) << rt << "\n";
+		else 
+			file << "0\n";
+		file << "	}";
+		if (i!=12) file << ",\n";
 	}
+	file << "\n]\n";
 }
